@@ -4,11 +4,13 @@ from rainbowio import colorwheel
 import neopixel
 import digitalio
 
+
+print('start')
 NUMPIXELS = 48# Update this to match the number of LEDs.
 SPEED = 0.05  # Increase to slow down the rainbow. Decrease to speed it up.
 BRIGHTNESS = 0.99  # A number between 0.0 and 1.0, where 0.0 is off, and 1.0 is max.
-TOP_LIGHT_PIN = board.D5
-LEFT_LED_PIN = board.D6
+TOP_LIGHT_PIN = board.NEOPIXEL7
+LEFT_LED_PIN = board.NEOPIXEL0
 
 BLACK = (0, 0, 0)
 RED = (255, 0, 0)
@@ -19,7 +21,7 @@ BLUE = (0, 0, 255)
 PURPLE = (180, 0, 255)
 
 
-PIR_PIN = board.D9   # Pin number connected to PIR sensor output wire.
+PIR_PIN = board.D24   # Pin number connected to PIR sensor output wire.
 
 # Setup digital input for PIR sensor:
 pir = digitalio.DigitalInOut(PIR_PIN)
@@ -34,6 +36,7 @@ top_led.direction = digitalio.Direction.OUTPUT
 old_value = pir.value
 while True:
     pir_value = pir.value
+
     if pir_value:
         # PIR is detecting movement! Turn on LED.
         # Check if this is the first time movement was
