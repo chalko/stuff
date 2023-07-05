@@ -3,6 +3,7 @@ import board
 from rainbowio import colorwheel
 import neopixel
 import digitalio
+from analogio import AnalogIn
 
 
 print('start')
@@ -32,10 +33,18 @@ pixels = neopixel.NeoPixel(LEFT_LED_PIN, NUMPIXELS, brightness=BRIGHTNESS, auto_
 top_led  = digitalio.DigitalInOut(TOP_LIGHT_PIN)
 top_led.direction = digitalio.Direction.OUTPUT
 
+board_led = digitalio.DigitalInOut(board.LED)
+board_led.direction = digitalio.Direction.OUTPUT
+
+
+dist_in = AnalogIn(board.A0)
+
 # Main loop that will run forever:
 old_value = pir.value
 while True:
     pir_value = pir.value
+    distRaw  = dist_in.value
+    #print("A0: %f" % distRaw)
 
     if pir_value:
         # PIR is detecting movement! Turn on LED.
@@ -43,6 +52,9 @@ while True:
         # detected and print a message!
         if not old_value:
             print('Motion detected!')
+            distRaw  = dist_in.value
+            print("A0: %f" % distRaw)  # write raw value to REPL
+            board_led.value = True
             pixels.fill(RED)
             pixels.show()
 
@@ -52,6 +64,7 @@ while True:
         # stopped and print a message.
         if old_value:
             print('Motion ended!')
+            board_led.value = False
             pixels.fill(BLUE)
             pixels.show()
             time.sleep(.5)
